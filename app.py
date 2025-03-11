@@ -1,3 +1,4 @@
+import random
 import streamlit as st
 import requests
 import matplotlib.pyplot as plt
@@ -142,28 +143,34 @@ def optimize_furniture_positions(room_width, room_height, furniture, positions):
     optimized_positions = []
     occupied_spaces = []
 
+    def is_overlapping(x, y, width, height):
+        """Check if the new furniture overlaps with any existing furniture."""
+        for ox, oy, ow, oh in occupied_spaces:
+            if (x < ox + ow and x + width > ox and y < oy + oh and y + height > oy):
+                return True
+        return False
+
     for i, item in enumerate(furniture):
         width, height = item["width"], item["height"]
-        x, y = positions[i * 2], positions[i * 2 + 1]
+        max_attempts = 100  # Limit the number of attempts to find a valid placement
+        attempt = 0
 
-        # Ensure furniture stays within room boundaries
-        x = max(0, min(x, room_width - width))
-        y = max(0, min(y, room_height - height))
+        while attempt < max_attempts:
+            # Randomize positions within room boundaries
+            x = random.uniform(0, room_width - width)
+            y = random.uniform(0, room_height - height)
 
-        # Avoid overlaps by checking occupied spaces
-        while any(
-            (x < ox + ow and x + width > ox and y < oy + oh and y + height > oy)
-            for ox, oy, ow, oh in occupied_spaces
-        ):
-            x += 0.1  # Small shift to avoid collision
-            if x + width > room_width:
-                x = 0
-                y += 0.1
-            if y + height > room_height:
-                break
+            if not is_overlapping(x, y, width, height):
+                optimized_positions.append((x, y))
+                occupied_spaces.append((x, y, width, height))
+                break  # Exit loop once a valid position is found
 
-        optimized_positions.append((x, y))
-        occupied_spaces.append((x, y, width, height))
+            attempt += 1
+
+        # If no valid position found after max attempts, place it at (0,0) (fallback)
+        if attempt == max_attempts:
+            optimized_positions.append((0, 0))
+            occupied_spaces.append((0, 0, width, height))
 
     return optimized_positions
 
