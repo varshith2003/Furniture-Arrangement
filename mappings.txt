@@ -1,0 +1,34 @@
+[Room Type Mapping]
+0: Bedroom
+1: Dining Room
+2: Living Room
+3: Office
+4: Kitchen
+5: Bathroom
+
+[Furniture Mapping]
+0: Armchair
+1: Bathtub
+2: Bed
+3: Bookshelf
+4: Cabinets
+5: Chair
+6: Coffee Table
+7: Console Table
+8: Couch
+9: Desk
+10: Dining Chairs
+11: Dining Table
+12: Filing Cabinet
+13: Fridge
+14: Microwave
+15: Mirror
+16: Office Chair
+17: Oven
+18: Sideboard
+19: Sink
+20: Sofa
+21: Storage Cabinet
+22: TV Stand
+23: Toilet
+24: Wardrobe
